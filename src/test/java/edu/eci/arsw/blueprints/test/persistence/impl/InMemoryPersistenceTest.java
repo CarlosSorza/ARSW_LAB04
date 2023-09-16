@@ -10,10 +10,14 @@ import edu.eci.arsw.blueprints.model.Point;
 import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
 import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.persistence.impl.InMemoryBlueprintPersistence;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import edu.eci.arsw.blueprints.persistence.impl.RedundancyFilter;
 
 /**
  *
@@ -69,6 +73,27 @@ public class InMemoryPersistenceTest {
         
     }
 
+    @Test
+    public void testingFilter() {
+        List<Point> puntosPrueba = new ArrayList<>();
+        puntosPrueba.add(new Point(0, 0));
+        puntosPrueba.add(new Point(10, 10));
+        puntosPrueba.add(new Point(-2, -2));
+        puntosPrueba.add(new Point(20,-2));
+        puntosPrueba.add(new Point(20,-2));
+        RedundancyFilter prueba = new RedundancyFilter();
+        Point[] puntos = {
+                new Point(0, 0), new Point(0, 0), new Point(10, 10),
+                new Point(1, 10), new Point(20, -2), new Point(2, -2)
+        };
+        Blueprint bp = new Blueprint("prueba", "prueba", puntos);
 
+        bp = prueba.BLUEPRINTEdition(bp);
+        System.out.println(bp.getPoints().size());
+        assertEquals(bp.getPoints().size() , puntosPrueba.size());
+
+        List<Point> res = bp.getPoints();
+
+    }
     
 }
